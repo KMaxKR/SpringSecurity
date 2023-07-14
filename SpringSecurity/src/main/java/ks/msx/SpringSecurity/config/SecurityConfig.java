@@ -27,6 +27,7 @@ public class SecurityConfig {
                         .requestMatchers("/api", "/api/info").permitAll()
                         .requestMatchers("/api/user").hasAnyAuthority(Authority.READ.name() , Authority.WRITE.name())
                         .requestMatchers("/api/admin").hasAuthority(Authority.WRITE.name())
+                        .requestMatchers( "/api/adduser").hasAuthority(Authority.WRITE.name())
                 ).formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
         return http.build();
     }

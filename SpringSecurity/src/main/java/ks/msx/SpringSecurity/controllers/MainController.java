@@ -2,15 +2,18 @@ package ks.msx.SpringSecurity.controllers;
 
 
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import ks.msx.SpringSecurity.entity.User;
+import ks.msx.SpringSecurity.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class MainController {
+    private final UserService service;
 
     @GetMapping
     public String unsecuredData(){
@@ -30,5 +33,10 @@ public class MainController {
     @GetMapping("/info")
     public String userData(Principal principal){
         return principal.getName();
+    }
+
+    @PostMapping("/adduser")
+    public void addUser(@RequestBody User user){
+        service.createUser(user);
     }
 }
