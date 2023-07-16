@@ -2,6 +2,7 @@ package ks.msx.SpringSecurity.config;
 
 
 import ks.msx.SpringSecurity.entity.Authority;
+import ks.msx.SpringSecurity.security.SecurityAuthority;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -25,9 +26,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api", "/api/info").permitAll()
-                        .requestMatchers("/api/user").hasAnyAuthority(Authority.READ.name() , Authority.WRITE.name())
-                        .requestMatchers("/api/admin").hasAuthority(Authority.WRITE.name())
-                        .requestMatchers( "/api/adduser").hasAuthority(Authority.WRITE.name())
+                        .requestMatchers("/api/user", "/api/auth").hasAnyAuthority("READ" , "WRITE")
+                        .requestMatchers("/api/admin", "/api/adduser").hasAuthority("WRITE")
                 ).formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
         return http.build();
     }

@@ -1,21 +1,16 @@
 package ks.msx.SpringSecurity.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
-@Data
-@RequiredArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,35 +22,14 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "autority")
-    private String authority;
-
     @Column(name = "account_non_locked")
     private boolean  account_non_locked;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_authority",
+            joinColumns = @JoinColumn (name = "userID"),
+            inverseJoinColumns = @JoinColumn(name = "authorityID")
+    )
+    private Set<Authority> authorities;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(authority));
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return account_non_locked;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return account_non_locked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return account_non_locked;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return account_non_locked;
-    }
 }
