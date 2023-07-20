@@ -26,8 +26,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api", "/api/info").permitAll()
-                        .requestMatchers("/api/user", "/api/auth").hasAnyAuthority("READ" , "WRITE")
-                        .requestMatchers("/api/admin", "/api/adduser").hasAuthority("WRITE")
+                        .anyRequest().authenticated()
+                        //.requestMatchers("/api/user", "/api/auth").hasAnyAuthority("READ" , "WRITE")
+                        //.requestMatchers("/api/admin", "/api/adduser").hasAuthority("WRITE")
                 ).formLogin(AbstractAuthenticationFilterConfigurer::permitAll);
         return http.build();
     }
